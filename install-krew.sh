@@ -1,4 +1,6 @@
-#!/bin/zsh
+#!/bin/bash
+
+# from https://krew.sigs.k8s.io/docs/user-guide/setup/install/#bash
 
 (
   set -x; cd "$(mktemp -d)" &&

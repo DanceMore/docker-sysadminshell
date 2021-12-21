@@ -20,9 +20,19 @@ RUN chmod +x /usr/local/bin/kyml
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-ADD install-krew.zsh /tmp
-RUN chmod +x install-krew.zsh
-RUN ./install-krew.zsh
+# install krew
+ADD install-krew.sh /tmp
+RUN chmod +x install-krew.sh
+RUN ./install-krew.sh
+
+# install krew plugins
+RUN kubectl krew install access-matrix
+RUN kubectl krew install deprecations
+RUN kubectl krew install doctor
+RUN kubectl krew install get-all
+RUN kubectl krew install pv-migrate
+RUN kubectl krew install who-can
+RUN kubectl krew install whoami
 
 # cleanup
 RUN rm -rf /tmp/*
