@@ -7,7 +7,7 @@ RUN apt update -y && apt upgrade -y
 RUN apt install -y curl git openssl screen python3-pip tmux wget zsh
 
 # root ohmyzsh
-RUN sh -c "$(curl -fssl https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN sed -i -e "s/robbyrussell/gentoo/" /root/.zshrc
 
 # add non-root user
