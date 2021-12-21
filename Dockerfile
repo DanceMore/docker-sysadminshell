@@ -36,15 +36,16 @@ RUN chmod +x install-krew.sh
 RUN ./install-krew.sh
 RUN echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> /root/.zshrc
 RUN echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> /home/user/.zshrc
+ENV PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # install krew plugins
-RUN kubectl krew install access-matrix
-RUN kubectl krew install deprecations
-RUN kubectl krew install doctor
-RUN kubectl krew install get-all
-RUN kubectl krew install pv-migrate
-RUN kubectl krew install who-can
-RUN kubectl krew install whoami
+#RUN kubectl krew install access-matrix
+#RUN kubectl krew install deprecations
+#RUN kubectl krew install doctor
+#RUN kubectl krew install get-all
+#RUN kubectl krew install pv-migrate
+#RUN kubectl krew install who-can
+#RUN kubectl krew install whoami
 
 # cleanup
 RUN rm -rf /tmp/*
