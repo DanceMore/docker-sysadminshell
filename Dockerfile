@@ -20,32 +20,35 @@ RUN sed -i -e "s/robbyrussell/gentoo/" /home/user/.zshrc
 USER root
 
 # awscli
-RUN pip3 install awscli
+#RUN pip3 install awscli
+
+# huber, the tool that lets me stop installing directly to /usr/local/bin !!
+# https://github.com/innobead/huber/releases/tag/v0.3.11
+RUN apt install -y libarchive13 libssl3
+RUN curl -sfL -o /usr/local/bin/huber https://github.com/innobead/huber/releases/download/v0.3.11/huber-linux-amd64
+RUN chmod +x /usr/local/bin/huber
+RUN echo 'export PATH="$HOME/.huber/bin:$PATH"' >> /root/.zshrc
+
+# install kubernetes stuff
+RUN huber update
+RUN huber install kubectl krew k9s
 
 # kyml https://github.com/frigus02/kyml
 RUN curl -sfL -o /usr/local/bin/kyml https://github.com/frigus02/kyml/releases/download/v20210610/kyml_20210610_linux_amd64
 RUN chmod +x /usr/local/bin/kyml
 
-# kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
-# install krew
-ADD install-krew.sh /tmp
-RUN chmod +x install-krew.sh
-RUN ./install-krew.sh
+# install krew into shell ..?
 RUN echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> /root/.zshrc
-RUN echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> /home/user/.zshrc
-ENV PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+ENV PATH "${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # install krew plugins
-#RUN kubectl krew install access-matrix
-#RUN kubectl krew install deprecations
-#RUN kubectl krew install doctor
-#RUN kubectl krew install get-all
-#RUN kubectl krew install pv-migrate
-#RUN kubectl krew install who-can
-#RUN kubectl krew install whoami
+RUN /root/.krew/bin/kubectl-krew install access-matrix
+RUN /root/.krew/bin/kubectl-krew install deprecations
+RUN /root/.krew/bin/kubectl-krew install doctor
+RUN /root/.krew/bin/kubectl-krew install get-all
+RUN /root/.krew/bin/kubectl-krew install pv-migrate
+RUN /root/.krew/bin/kubectl-krew install who-can
+RUN /root/.krew/bin/kubectl-krew install whoami
 
 # cleanup
 RUN rm -rf /tmp/*
